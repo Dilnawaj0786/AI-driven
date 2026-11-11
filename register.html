@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Register | Food Rescue AI</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #e9f8ed, #f5faf6);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 25px 15px;
+            color: #183b2a;
+        }
+
+        .register-container {
+            width: 100%;
+            max-width: 560px;
+            background: white;
+            padding: 38px;
+            border-radius: 22px;
+            box-shadow: 0 15px 45px rgba(20,70,40,0.10);
+        }
+
+        .logo {
+            width: 62px;
+            height: 62px;
+            background: #e4f5e9;
+            border-radius: 17px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin: 0 auto 18px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 29px;
+            margin: 0 0 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #748379;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 28px;
+        }
+
+        .notice {
+            background: #fff0ed;
+            color: #b33b2e;
+            padding: 13px;
+            border-radius: 9px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 19px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 9px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #dce8df;
+            border-radius: 10px;
+            outline: none;
+            font-size: 14px;
+            background: #fbfdfb;
+            color: #183b2a;
+        }
+
+        input:focus, select:focus {
+            border-color: #16834a;
+            box-shadow: 0 0 0 3px rgba(22,131,74,0.10);
+        }
+
+        .ngo-fields {
+            display: none;
+            background: #f3faf5;
+            border: 1px solid #dceee1;
+            padding: 22px;
+            border-radius: 14px;
+            margin: 22px 0;
+        }
+
+        .ngo-fields h3 {
+            color: #16834a;
+            margin: 0 0 20px;
+            font-size: 19px;
+        }
+
+        .ngo-note {
+            color: #748379;
+            font-size: 12px;
+            line-height: 1.5;
+            margin-top: 5px;
+        }
+
+        .register-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(90deg, #16834a, #24a45d);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+
+        .register-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 18px rgba(22,131,74,0.22);
+        }
+
+        .auth-bottom {
+            text-align: center;
+            margin-top: 24px;
+            font-size: 14px;
+            color: #748379;
+        }
+
+        .auth-bottom a, .back-home {
+            color: #16834a;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .back-home {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 480px) {
+            .register-container {
+                padding: 28px 21px;
+            }
+
+            h1 {
+                font-size: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="register-container">
+
+    <div class="logo">🍃</div>
+
+    <h1>Join FoodRescue AI</h1>
+
+    <p class="subtitle">
+        Create your account and become a part of
+        our mission to reduce food waste.
+    </p>
+
+    {% if message %}
+    <div class="notice">{{ message }}</div>
+    {% endif %}
+
+    <form method="POST">
+
+        <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" name="name"
+                   placeholder="Enter your full name" required>
+        </div>
+
+        <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" name="email"
+                   placeholder="Enter your email" required>
+        </div>
+
+        <div class="form-group">
+            <label>Phone Number</label>
+            <input type="tel" name="phone"
+                   placeholder="Enter phone number" required>
+        </div>
+
+        <div class="form-group">
+            <label>Address</label>
+            <input type="text" name="address"
+                   placeholder="Enter your address" required>
+        </div>
+
+        <div class="form-group">
+            <label>Account Type</label>
+
+            <select name="role" id="role" required>
+                <option value="">Select Account Type</option>
+                <option value="donor">Food Donor</option>
+                <option value="ngo">NGO</option>
+            </select>
+        </div>
+
+        <div id="ngo-fields" class="ngo-fields">
+
+            <h3>🏢 NGO Information</h3>
+
+            <div class="form-group">
+                <label>Food Serving Capacity (People)</label>
+                <input type="number"
+                       name="capacity_people"
+                       min="1"
+                       placeholder="Example: 500">
+            </div>
+
+            <div class="form-group">
+                <label>Food Requirements</label>
+                <input type="text"
+                       name="food_requirements"
+                       placeholder="Example: Rice, Vegetables, Fruits">
+            </div>
+
+            <div class="form-group">
+                <label>NGO Latitude</label>
+                <input type="number"
+                       step="any"
+                       name="latitude"
+                       placeholder="Example: 26.8467">
+            </div>
+
+            <div class="form-group">
+                <label>NGO Longitude</label>
+                <input type="number"
+                       step="any"
+                       name="longitude"
+                       placeholder="Example: 80.9462">
+            </div>
+
+            <p class="ngo-note">
+                These details help our matching system
+                recommend suitable food donations.
+            </p>
+
+        </div>
+
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password"
+                   name="password"
+                   placeholder="Create password"
+                   required>
+        </div>
+
+        <button type="submit" class="register-btn">
+            Create Account →
+        </button>
+
+    </form>
+
+    <p class="auth-bottom">
+        Already have an account?
+        <a href="{{ url_for('login') }}">Login</a>
+    </p>
+
+    <a href="{{ url_for('home') }}" class="back-home">
+        ← Back to Home
+    </a>
+
+</div>
+
+<script>
+    const roleSelect = document.getElementById("role");
+    const ngoFields = document.getElementById("ngo-fields");
+
+    function updateNgoFields() {
+        if (roleSelect.value === "ngo") {
+            ngoFields.style.display = "block";
+        } else {
+            ngoFields.style.display = "none";
+        }
+    }
+
+    roleSelect.addEventListener("change", updateNgoFields);
+
+    updateNgoFields();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Smart NGO Matching | Food Rescue</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f3f8f4;
+            color: #183b2a;
+        }
+
+        .topbar {
+            background: white;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.05);
+        }
+
+        .brand {
+            font-size: 22px;
+            font-weight: bold;
+            color: #16834a;
+        }
+
+        .back-link {
+            color: #16834a;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 45px auto;
+            padding: 0 22px;
+        }
+
+        .heading {
+            margin-bottom: 30px;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #dff4e5;
+            color: #16834a;
+            padding: 8px 14px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .heading h1 {
+            font-size: 34px;
+            margin: 16px 0 8px;
+        }
+
+        .heading p {
+            color: #748379;
+            line-height: 1.6;
+        }
+
+        .donation-summary {
+            background: white;
+            padding: 25px;
+            border-radius: 18px;
+            box-shadow: 0 8px 25px rgba(20,70,40,0.06);
+            margin-bottom: 35px;
+        }
+
+        .donation-summary h2 {
+            margin-top: 0;
+            font-size: 23px;
+        }
+
+        .summary-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .summary-item {
+            background: #f1f8f3;
+            padding: 16px;
+            border-radius: 12px;
+        }
+
+        .summary-item span {
+            display: block;
+            color: #748379;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .summary-item strong {
+            font-size: 17px;
+        }
+
+        .section-title {
+            font-size: 25px;
+            margin-bottom: 22px;
+        }
+
+        .matches-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+            gap: 23px;
+        }
+
+        .match-card {
+            background: white;
+            padding: 25px;
+            border-radius: 18px;
+            border: 1px solid #e7eee9;
+            box-shadow: 0 8px 25px rgba(20,70,40,0.07);
+            transition: 0.3s;
+        }
+
+        .match-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 13px 30px rgba(20,70,40,0.12);
+        }
+
+        .best-match {
+            border: 2px solid #20a45b;
+            background: linear-gradient(145deg, #ffffff, #f0faf3);
+        }
+
+        .trophy {
+            display: inline-block;
+            background: #fff2cf;
+            color: #946500;
+            padding: 8px 13px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .recommendation {
+            color: #16834a;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .ngo-icon {
+            width: 52px;
+            height: 52px;
+            background: #e4f5e9;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 27px;
+        }
+
+        .match-card h2 {
+            font-size: 21px;
+            margin: 16px 0 10px;
+        }
+
+        .address {
+            color: #748379;
+            font-size: 14px;
+            line-height: 1.6;
+            overflow-wrap: anywhere;
+        }
+
+        .score-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 24px;
+            margin-bottom: 10px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .score {
+            color: #16834a;
+            font-size: 23px;
+        }
+
+        .progress {
+            width: 100%;
+            height: 11px;
+            background: #e8eee9;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #16834a, #48c77a);
+            border-radius: 20px;
+        }
+
+        .reason-title {
+            margin-top: 22px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .reason {
+            background: #f1f8f3;
+            padding: 10px 12px;
+            border-radius: 9px;
+            margin-top: 9px;
+            color: #526d5b;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .empty-state {
+            background: white;
+            padding: 55px 20px;
+            text-align: center;
+            border-radius: 18px;
+        }
+
+        .empty-state .emoji {
+            font-size: 50px;
+        }
+
+        .empty-state p {
+            color: #748379;
+        }
+
+        @media (max-width: 600px) {
+            .topbar {
+                padding: 16px 5%;
+            }
+
+            .heading h1 {
+                font-size: 27px;
+            }
+
+            .container {
+                margin: 28px auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<nav class="topbar">
+    <div class="brand">🍃 Food Rescue</div>
+
+    <a class="back-link" href="{{ url_for('dashboard') }}">
+        ← Dashboard
+    </a>
+</nav>
+
+<main class="container">
+
+    <section class="heading">
+
+        <span class="tag">🤖 Smart Matching System</span>
+
+        <h1>Smart NGO Matching</h1>
+
+        <p>
+            Find the most suitable NGOs for your food donation
+            using our compatibility scoring system.
+        </p>
+
+    </section>
+
+    <section class="donation-summary">
+
+        <h2>🍱 Donation Details</h2>
+
+        <div class="summary-details">
+
+            <div class="summary-item">
+                <span>Food Name</span>
+                <strong>{{ donation.food_name }}</strong>
+            </div>
+
+            <div class="summary-item">
+                <span>Quantity</span>
+                <strong>{{ donation.quantity }}</strong>
+            </div>
+
+            <div class="summary-item">
+                <span>People to Serve</span>
+                <strong>{{ donation.people_count }}</strong>
+            </div>
+
+        </div>
+
+    </section>
+
+    {% if matches %}
+
+        <h2 class="section-title">🏆 Recommended NGOs</h2>
+
+        <div class="matches-grid">
+
+            {% for ngo in matches %}
+
+            <div class="match-card {% if loop.first %}best-match{% endif %}">
+
+                {% if loop.first %}
+
+                    <div class="trophy">🏆 BEST MATCH</div>
+
+                {% else %}
+
+                    <div class="recommendation">
+                        RECOMMENDATION #{{ loop.index }}
+                    </div>
+
+                {% endif %}
+
+                <div class="ngo-icon">🏢</div>
+
+                <h2>{{ ngo.name }}</h2>
+
+                <p class="address">
+                    📍 {{ ngo.address }}
+                </p>
+
+                <div class="score-heading">
+                    <span>Compatibility Score</span>
+
+                    <span class="score">
+                        {{ ngo.score }}%
+                    </span>
+                </div>
+
+                <div class="progress">
+    <div class="progress-fill"
+         data-score="{{ ngo.score | int }}">
+    </div>
+</div>
+
+                <p class="reason-title">
+                    Why this NGO matches:
+                </p>
+
+                {% for reason in ngo.reasons %}
+
+                    <div class="reason">
+                        ✓ {{ reason }}
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <div class="empty-state">
+            <div class="emoji">🔍</div>
+
+            <h2>No Matching NGOs Found</h2>
+
+            <p>
+                No suitable NGOs were found for this donation.
+                Try again when more NGOs register.
+            </p>
+        </div>
+
+    {% endif %}
+
+</main>
+
+</body>
+</html>

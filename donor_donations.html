@@ -1,0 +1,327 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Donations | Food Rescue</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f3f8f4;
+            color: #183b2a;
+        }
+
+        .topbar {
+            background: white;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.05);
+        }
+
+        .brand {
+            font-size: 22px;
+            font-weight: bold;
+            color: #16834a;
+        }
+
+        .back-link {
+            color: #16834a;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1150px;
+            margin: 45px auto;
+            padding: 0 22px;
+        }
+
+        .heading {
+            margin-bottom: 30px;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #dff4e5;
+            color: #16834a;
+            padding: 8px 14px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .heading h1 {
+            font-size: 34px;
+            margin: 16px 0 8px;
+        }
+
+        .heading p {
+            color: #748379;
+            line-height: 1.6;
+        }
+
+        .donation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+            gap: 23px;
+        }
+
+        .donation-card {
+            background: white;
+            padding: 25px;
+            border-radius: 18px;
+            border: 1px solid #e7eee9;
+            box-shadow: 0 8px 25px rgba(20,70,40,0.07);
+            transition: 0.3s;
+        }
+
+        .donation-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 13px 30px rgba(20,70,40,0.12);
+        }
+
+        .food-icon {
+            width: 52px;
+            height: 52px;
+            background: #e4f5e9;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 27px;
+        }
+
+        .donation-card h2 {
+            font-size: 22px;
+            margin: 18px 0 15px;
+        }
+
+        .details {
+            border-top: 1px solid #edf1ed;
+            padding-top: 14px;
+        }
+
+        .details p {
+            color: #64766a;
+            font-size: 14px;
+            line-height: 1.6;
+            margin: 10px 0;
+            overflow-wrap: anywhere;
+        }
+
+        .details b {
+            color: #304d3a;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .status-accepted {
+            background: #dff4e5;
+            color: #16834a;
+        }
+
+        .status-pending {
+            background: #fff4d8;
+            color: #946500;
+        }
+
+        .ngo-info {
+            background: #f1f8f3;
+            padding: 13px;
+            border-radius: 10px;
+            margin-top: 17px;
+            font-size: 13px;
+            color: #526d5b;
+            line-height: 1.7;
+        }
+
+        .match-btn {
+            display: block;
+            width: 100%;
+            text-align: center;
+            background: #16834a;
+            color: white;
+            padding: 14px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            margin-top: 20px;
+            transition: 0.3s;
+        }
+
+        .match-btn:hover {
+            background: #106b3b;
+            transform: translateY(-2px);
+        }
+
+        .waiting {
+            color: #946500;
+            font-size: 13px;
+            margin-top: 15px;
+            background: #fff9e9;
+            padding: 12px;
+            border-radius: 10px;
+        }
+
+        .empty-state {
+            background: white;
+            padding: 55px 20px;
+            text-align: center;
+            border-radius: 18px;
+            box-shadow: 0 8px 25px rgba(20,70,40,0.06);
+        }
+
+        .empty-state .emoji {
+            font-size: 50px;
+        }
+
+        .empty-state p {
+            color: #748379;
+        }
+
+        @media (max-width: 600px) {
+            .topbar {
+                padding: 16px 5%;
+            }
+
+            .heading h1 {
+                font-size: 27px;
+            }
+
+            .container {
+                margin: 28px auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<nav class="topbar">
+    <div class="brand">🍃 Food Rescue</div>
+
+    <a class="back-link" href="{{ url_for('dashboard') }}">
+        ← Dashboard
+    </a>
+</nav>
+
+<main class="container">
+
+    <section class="heading">
+        <span class="tag">❤️ Donor Panel</span>
+
+        <h1>My Food Donations</h1>
+
+        <p>
+            Track your food donations and see which NGOs
+            have accepted your contributions.
+        </p>
+    </section>
+
+    {% if donations %}
+
+    <div class="donation-grid">
+
+        {% for donation in donations %}
+
+        <div class="donation-card">
+
+            <div class="food-icon">🍱</div>
+
+            <h2>{{ donation.food_name }}</h2>
+
+            <div class="details">
+
+                <p><b>Quantity:</b> {{ donation.quantity }}</p>
+
+                <p><b>People Served:</b> {{ donation.people_count }}</p>
+
+                <p><b>Pickup Address:</b> {{ donation.pickup_address }}</p>
+
+                <span class="status
+                    {% if donation.status == 'Accepted' %}
+                        status-accepted
+                    {% else %}
+                        status-pending
+                    {% endif %}">
+                    {{ donation.status }}
+                </span>
+
+            </div>
+
+            {% if donation.status == 'Accepted' %}
+
+                <div class="ngo-info">
+
+                    <b>🤝 Accepted By NGO:</b><br>
+                    {{ donation.ngo_name }}
+
+                    <br><br>
+
+                    <b>🕒 Accepted At:</b><br>
+
+                    {{ donation.accepted_at.strftime('%d-%m-%Y %I:%M %p') if donation.accepted_at else 'Not available' }}
+
+                </div>
+
+            {% else %}
+
+                <div class="waiting">
+                    ⏳ Your donation is waiting for an NGO.
+                </div>
+
+                <a href="{{ url_for('ngo_matches', donation_id=donation.id) }}"
+                   class="match-btn">
+                    Find NGO Matches →
+                </a>
+
+            {% endif %}
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    {% else %}
+
+    <div class="empty-state">
+
+        <div class="emoji">🍃</div>
+
+        <h2>No Donations Yet</h2>
+
+        <p>
+            You have not submitted any food donations yet.
+            Start donating surplus food and help people in need.
+        </p>
+
+    </div>
+
+    {% endif %}
+
+</main>
+
+</body>
+</html>

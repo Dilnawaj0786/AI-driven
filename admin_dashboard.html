@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard | Food Rescue</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f3f8f4;
+            color: #183b2a;
+        }
+
+        .topbar {
+            background: white;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.05);
+        }
+
+        .brand {
+            color: #16834a;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .logout {
+            background: #16834a;
+            color: white;
+            padding: 11px 20px;
+            border-radius: 9px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 45px auto;
+            padding: 0 22px;
+        }
+
+        .welcome {
+            margin-bottom: 35px;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #dff4e5;
+            color: #16834a;
+            padding: 8px 14px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .welcome h1 {
+            font-size: 34px;
+            margin: 17px 0 8px;
+        }
+
+        .welcome p {
+            color: #748379;
+            line-height: 1.6;
+        }
+
+        .section-title {
+            font-size: 23px;
+            margin: 35px 0 20px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 7px 22px rgba(20,70,40,0.06);
+            border: 1px solid #e7eee9;
+            transition: 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 25px rgba(20,70,40,0.10);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #e4f5e9;
+            border-radius: 13px;
+            font-size: 24px;
+            margin-bottom: 17px;
+        }
+
+        .stat-card p {
+            color: #748379;
+            font-size: 14px;
+            margin: 0 0 10px;
+        }
+
+        .stat-card h2 {
+            color: #16834a;
+            font-size: 30px;
+            margin: 0;
+        }
+
+        .footer-note {
+            background: #e5f5e9;
+            padding: 22px;
+            border-radius: 14px;
+            margin-top: 40px;
+            color: #376348;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 600px) {
+            .topbar {
+                padding: 16px 5%;
+            }
+
+            .welcome h1 {
+                font-size: 27px;
+            }
+
+            .container {
+                margin: 28px auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<nav class="topbar">
+    <div class="brand">🍃 Food Rescue Admin</div>
+
+    <a class="logout" href="{{ url_for('logout') }}">
+        Logout ↗
+    </a>
+</nav>
+
+<main class="container">
+
+    <section class="welcome">
+
+        <span class="tag">🛡️ ADMIN CONTROL PANEL</span>
+
+        <h1>Welcome, {{ session.name }}!</h1>
+
+        <p>
+            Monitor users, NGOs and food donation activities
+            from your administration dashboard.
+        </p>
+
+    </section>
+
+    <h2 class="section-title">👥 User Statistics</h2>
+
+    <div class="stats-grid">
+
+        <div class="stat-card">
+            <div class="stat-icon">👥</div>
+            <p>Total Users</p>
+            <h2>{{ user_stats.total_users or 0 }}</h2>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">🍱</div>
+            <p>Total Donors</p>
+            <h2>{{ user_stats.total_donors or 0 }}</h2>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">🏢</div>
+            <p>Total NGOs</p>
+            <h2>{{ user_stats.total_ngos or 0 }}</h2>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">🛡️</div>
+            <p>Total Admins</p>
+            <h2>{{ user_stats.total_admins or 0 }}</h2>
+        </div>
+
+    </div>
+
+    <h2 class="section-title">📊 Donation Statistics</h2>
+
+    <div class="stats-grid">
+
+        <div class="stat-card">
+            <div class="stat-icon">📦</div>
+            <p>Total Donations</p>
+            <h2>{{ donation_stats.total_donations or 0 }}</h2>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">⏳</div>
+            <p>Available Donations</p>
+            <h2>{{ donation_stats.available_donations or 0 }}</h2>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">✅</div>
+            <p>Accepted Donations</p>
+            <h2>{{ donation_stats.accepted_donations or 0 }}</h2>
+        </div>
+
+    </div>
+
+    <div class="footer-note">
+        <strong>🌱 Making a Difference</strong>
+        <p>
+            Every successful food donation helps reduce food waste
+            and supports people in need. Thank you for managing
+            the Food Rescue platform.
+        </p>
+    </div>
+
+</main>
+
+</body>
+</html>

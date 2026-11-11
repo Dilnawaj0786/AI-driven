@@ -1,0 +1,367 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>FoodRescue AI | Dashboard</title>
+
+    <link rel="stylesheet"
+    href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f1f7f2;
+            color: #183c2b;
+            min-height: 100vh;
+        }
+
+        .topbar {
+            background: white;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 3px 18px rgba(0,0,0,0.05);
+        }
+
+        .brand {
+            font-size: 25px;
+            font-weight: 800;
+            color: #16432e;
+        }
+
+        .brand span {
+            color: #e69b36;
+        }
+
+        .logout-btn {
+            color: #b13b3b;
+            border: 1px solid #f0caca;
+            padding: 10px 20px;
+            border-radius: 9px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #fff0f0;
+        }
+
+        .dashboard-wrapper {
+            max-width: 1100px;
+            margin: 55px auto;
+            padding: 0 25px;
+        }
+
+        .welcome-banner {
+            background: linear-gradient(120deg, #145a38, #168653);
+            color: white;
+            padding: 42px;
+            border-radius: 22px;
+            margin-bottom: 35px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(20,100,60,0.15);
+        }
+
+        .welcome-banner::after {
+            content: "🌱";
+            position: absolute;
+            right: 45px;
+            top: 20px;
+            font-size: 100px;
+            opacity: 0.2;
+        }
+
+        .welcome-banner h1 {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .welcome-banner p {
+            color: #e0f3e5;
+            font-size: 16px;
+            line-height: 1.7;
+        }
+
+        .role-label {
+            display: inline-block;
+            background: rgba(255,255,255,0.16);
+            padding: 8px 15px;
+            border-radius: 30px;
+            margin-top: 18px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .section-heading {
+            margin-bottom: 22px;
+        }
+
+        .section-heading h2 {
+            font-size: 25px;
+            color: #17432e;
+            margin-bottom: 8px;
+        }
+
+        .section-heading p {
+            color: #718177;
+            line-height: 1.6;
+        }
+
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 22px;
+        }
+
+        .action-card {
+            background: white;
+            padding: 30px;
+            border-radius: 18px;
+            border: 1px solid #e4eee5;
+            box-shadow: 0 8px 25px rgba(30,80,45,0.04);
+            transition: 0.3s;
+        }
+
+        .action-card:hover {
+            transform: translateY(-7px);
+            box-shadow: 0 15px 32px rgba(30,80,45,0.10);
+        }
+
+        .card-icon {
+            width: 58px;
+            height: 58px;
+            border-radius: 16px;
+            background: #e6f5e9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 22px;
+        }
+
+        .action-card h3 {
+            font-size: 21px;
+            margin-bottom: 12px;
+            color: #17432e;
+        }
+
+        .action-card p {
+            color: #718177;
+            line-height: 1.7;
+            margin-bottom: 23px;
+        }
+
+        .action-btn {
+            display: inline-block;
+            background: #147b4b;
+            color: white;
+            padding: 12px 21px;
+            border-radius: 9px;
+            font-size: 14px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .action-btn:hover {
+            background: #105d38;
+            transform: translateY(-2px);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 28px 15px;
+            color: #819087;
+            font-size: 13px;
+        }
+
+        @media(max-width: 650px) {
+            .topbar {
+                padding: 16px 5%;
+            }
+
+            .brand {
+                font-size: 21px;
+            }
+
+            .dashboard-wrapper {
+                margin: 30px auto;
+                padding: 0 17px;
+            }
+
+            .welcome-banner {
+                padding: 30px 23px;
+            }
+
+            .welcome-banner h1 {
+                font-size: 25px;
+            }
+
+            .welcome-banner::after {
+                right: 10px;
+                top: 12px;
+                font-size: 65px;
+            }
+
+            .action-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .action-card {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- TOP NAVIGATION -->
+
+    <header class="topbar">
+        <div class="brand">
+            FoodRescue<span>AI</span>
+        </div>
+
+        <a href="{{ url_for('logout') }}" class="logout-btn">
+            Logout ↗
+        </a>
+    </header>
+
+
+    <!-- DASHBOARD CONTENT -->
+
+    <main class="dashboard-wrapper">
+
+        <section class="welcome-banner">
+
+            <h1>Welcome, {{ session.name }}! 👋</h1>
+
+            <p>
+                Together, we can reduce food waste
+                and make a difference in our community.
+            </p>
+
+            <span class="role-label">
+                {{ session.role|title }} Account
+            </span>
+
+        </section>
+
+
+        {% if session.role == 'donor' %}
+
+            <div class="section-heading">
+                <h2>Donor Dashboard</h2>
+                <p>Share surplus food and help communities in need.</p>
+            </div>
+
+            <div class="action-grid">
+
+                <div class="action-card">
+
+                    <div class="card-icon">🍱</div>
+
+                    <h3>Donate Food</h3>
+
+                    <p>
+                        Have extra food? Submit your food details
+                        so NGOs can collect and distribute it.
+                    </p>
+
+                    <a href="{{ url_for('donate') }}" class="action-btn">
+                        + Donate Food →
+                    </a>
+
+                </div>
+
+
+                <div class="action-card">
+
+                    <div class="card-icon">📦</div>
+
+                    <h3>My Donations</h3>
+
+                    <p>
+                        Track your food donations, check their
+                        current status and see which NGO accepted them.
+                    </p>
+
+                    <a href="{{ url_for('my_donations') }}" class="action-btn">
+                        View My Donations →
+                    </a>
+
+                </div>
+
+            </div>
+
+
+        {% elif session.role == 'ngo' %}
+
+            <div class="section-heading">
+                <h2>NGO Dashboard</h2>
+                <p>Find available food donations and support people in need.</p>
+            </div>
+
+            <div class="action-grid">
+
+                <div class="action-card">
+
+                    <div class="card-icon">🔎</div>
+
+                    <h3>Available Donations</h3>
+
+                    <p>
+                        Explore available food donations
+                        submitted by registered food donors.
+                    </p>
+
+                    <a href="{{ url_for('ngo_donations') }}" class="action-btn">
+                        View Available Food →
+                    </a>
+
+                </div>
+
+
+                <div class="action-card">
+
+                    <div class="card-icon">🤝</div>
+
+                    <h3>My Accepted Donations</h3>
+
+                    <p>
+                        View the donations accepted by your NGO
+                        and track their details.
+                    </p>
+
+                    <a href="{{ url_for('my_accepted_donations') }}" class="action-btn">
+                        View Accepted Donations →
+                    </a>
+
+                </div>
+
+            </div>
+
+        {% endif %}
+
+    </main>
+
+
+    <footer class="footer">
+        © 2026 FoodRescue AI | Save Food. Share Hope.
+    </footer>
+
+</body>
+</html>

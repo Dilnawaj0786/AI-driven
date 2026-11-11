@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Accepted Donations | Food Rescue</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f3f8f4;
+            color: #183b2a;
+        }
+
+        .topbar {
+            background: white;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.05);
+        }
+
+        .brand {
+            font-size: 22px;
+            font-weight: bold;
+            color: #16834a;
+        }
+
+        .back-link {
+            color: #16834a;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1150px;
+            margin: 45px auto;
+            padding: 0 22px;
+        }
+
+        .heading {
+            margin-bottom: 30px;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #dff4e5;
+            color: #16834a;
+            padding: 8px 14px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .heading h1 {
+            font-size: 34px;
+            margin: 16px 0 8px;
+        }
+
+        .heading p {
+            color: #748379;
+            line-height: 1.6;
+        }
+
+        .donation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+            gap: 23px;
+        }
+
+        .donation-card {
+            background: white;
+            padding: 25px;
+            border-radius: 18px;
+            border: 1px solid #e7eee9;
+            box-shadow: 0 8px 25px rgba(20,70,40,0.07);
+            transition: 0.3s;
+        }
+
+        .donation-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 13px 30px rgba(20,70,40,0.12);
+        }
+
+        .food-icon {
+            width: 52px;
+            height: 52px;
+            background: #e4f5e9;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 27px;
+        }
+
+        .donation-card h2 {
+            font-size: 22px;
+            margin: 18px 0 15px;
+        }
+
+        .details {
+            border-top: 1px solid #edf1ed;
+            padding-top: 14px;
+        }
+
+        .details p {
+            color: #64766a;
+            font-size: 14px;
+            line-height: 1.6;
+            margin: 10px 0;
+            overflow-wrap: anywhere;
+        }
+
+        .details b {
+            color: #304d3a;
+        }
+
+        .status {
+            display: inline-block;
+            background: #dff4e5;
+            color: #16834a;
+            padding: 7px 13px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-top: 12px;
+        }
+
+        .accepted-time {
+            background: #f1f8f3;
+            padding: 12px;
+            border-radius: 10px;
+            margin-top: 17px;
+            font-size: 13px;
+            color: #526d5b;
+            line-height: 1.6;
+        }
+
+        .empty-state {
+            background: white;
+            padding: 55px 20px;
+            text-align: center;
+            border-radius: 18px;
+            box-shadow: 0 8px 25px rgba(20,70,40,0.06);
+        }
+
+        .empty-state .emoji {
+            font-size: 50px;
+        }
+
+        .empty-state p {
+            color: #748379;
+        }
+
+        @media (max-width: 600px) {
+            .topbar {
+                padding: 16px 5%;
+            }
+
+            .heading h1 {
+                font-size: 27px;
+            }
+
+            .container {
+                margin: 28px auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<nav class="topbar">
+    <div class="brand">🍃 Food Rescue</div>
+
+    <a class="back-link" href="{{ url_for('dashboard') }}">
+        ← Dashboard
+    </a>
+</nav>
+
+<main class="container">
+
+    <section class="heading">
+        <span class="tag">🤝 NGO Panel</span>
+
+        <h1>My Accepted Donations</h1>
+
+        <p>
+            Track all food donations accepted by your NGO
+            and manage your food rescue activities.
+        </p>
+    </section>
+
+    {% if donations %}
+
+    <div class="donation-grid">
+
+        {% for donation in donations %}
+
+        <div class="donation-card">
+
+            <div class="food-icon">🍱</div>
+
+            <h2>{{ donation.food_name }}</h2>
+
+            <div class="details">
+
+                <p><b>Donor:</b> {{ donation.donor_name }}</p>
+
+                <p><b>Quantity:</b> {{ donation.quantity }}</p>
+
+                <p><b>People Served:</b> {{ donation.people_count }}</p>
+
+                <p><b>Pickup Address:</b> {{ donation.pickup_address }}</p>
+
+                <p>
+                    <b>Expiry:</b>
+                    {{ donation.expiry_date.strftime('%d-%m-%Y %I:%M %p') }}
+                </p>
+
+                <span class="status">
+                    ✓ Accepted
+                </span>
+
+                <div class="accepted-time">
+                    <b>🕒 Accepted At:</b><br>
+
+                    {{ donation.accepted_at.strftime('%d-%m-%Y %I:%M %p') if donation.accepted_at else 'Not available' }}
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    {% else %}
+
+    <div class="empty-state">
+
+        <div class="emoji">🍃</div>
+
+        <h2>No Accepted Donations Yet</h2>
+
+        <p>
+            Your NGO has not accepted any donations yet.
+            Visit Available Donations to explore food donations.
+        </p>
+
+    </div>
+
+    {% endif %}
+
+</main>
+
+</body>
+</html>

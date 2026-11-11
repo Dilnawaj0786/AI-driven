@@ -1,0 +1,750 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>FoodRescue AI | Save Food, Share Hope</title>
+
+    <link rel="stylesheet"
+    href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f7faf7;
+            color: #172d23;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        /* NAVBAR */
+
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 7%;
+            background: rgba(255,255,255,0.94);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 3px 20px rgba(0,0,0,0.05);
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: 800;
+            color: #123e2c;
+        }
+
+        .logo span {
+            color: #e69b36;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: #344c40;
+            font-size: 14px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #16945c;
+        }
+
+        .nav-buttons {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .login-btn, .register-btn {
+            padding: 11px 22px;
+            border-radius: 9px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .login-btn {
+            color: #174d34;
+            border: 1px solid #174d34;
+        }
+
+        .register-btn {
+            background: #147b4b;
+            color: white;
+        }
+
+        .login-btn:hover,
+        .register-btn:hover,
+        .main-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(20,123,75,0.2);
+        }
+
+        /* HERO */
+
+        .hero {
+            min-height: 590px;
+            padding: 90px 8%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+            background:
+                radial-gradient(circle at 85% 20%, #d9f4df 0, transparent 35%),
+                linear-gradient(120deg, #f4faf4, #eaf7ee);
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 570px;
+            animation: slideUp 0.9s ease;
+        }
+
+        .tagline {
+            display: inline-block;
+            background: #dff4e6;
+            color: #147b4b;
+            padding: 10px 17px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            margin-bottom: 25px;
+        }
+
+        .hero h1 {
+            font-size: clamp(46px, 6vw, 76px);
+            line-height: 1.08;
+            font-weight: 850;
+            color: #153c2b;
+            margin-bottom: 22px;
+        }
+
+        .hero h1 span {
+            color: #15945b;
+        }
+
+        .hero p {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #52685a;
+            max-width: 520px;
+            margin-bottom: 32px;
+        }
+
+        .main-btn {
+            display: inline-block;
+            background: #147b4b;
+            color: white;
+            padding: 16px 29px;
+            border-radius: 10px;
+            font-weight: 700;
+            transition: 0.3s;
+        }
+
+        /* HERO VISUAL */
+
+        .hero-visual {
+            position: relative;
+            width: 440px;
+            height: 390px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .food-circle {
+            width: 310px;
+            height: 310px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #b9ebc9, #e1f6e6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 145px;
+            box-shadow: 0 25px 60px rgba(27,105,63,0.13);
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .floating-card {
+            position: absolute;
+            background: white;
+            padding: 15px 19px;
+            border-radius: 14px;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.09);
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .card-one {
+            top: 35px;
+            left: 0;
+        }
+
+        .card-two {
+            bottom: 40px;
+            right: -5px;
+        }
+
+        /* TRUST STRIP */
+
+        .trust-strip {
+            background: white;
+            padding: 28px 7%;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 45px;
+            border-bottom: 1px solid #edf1ed;
+        }
+
+        .trust-item {
+            color: #456052;
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        /* GENERAL SECTIONS */
+
+        section:not(.hero) {
+            padding: 85px 8%;
+        }
+
+        .section-heading {
+            text-align: center;
+            max-width: 680px;
+            margin: 0 auto 45px;
+        }
+
+        .section-heading span {
+            color: #15945b;
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 2px;
+        }
+
+        .section-heading h2 {
+            color: #173e2c;
+            font-size: clamp(30px, 4vw, 42px);
+            margin: 12px 0;
+        }
+
+        .section-heading p {
+            color: #65776c;
+            line-height: 1.8;
+        }
+
+        /* ABOUT */
+
+        .about {
+            background: white;
+            text-align: center;
+        }
+
+        .about-content {
+            max-width: 850px;
+            margin: auto;
+            background: #f1f8f2;
+            padding: 38px;
+            border-radius: 20px;
+            border: 1px solid #e3f0e5;
+        }
+
+        .about-content p {
+            color: #53675a;
+            line-height: 1.9;
+            font-size: 16px;
+        }
+
+        /* HOW IT WORKS */
+
+        .how {
+            background: #f7faf7;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 35px 28px;
+            border-radius: 18px;
+            border: 1px solid #e7efe8;
+            box-shadow: 0 10px 30px rgba(20,70,40,0.04);
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-9px);
+            box-shadow: 0 18px 35px rgba(20,70,40,0.10);
+        }
+
+        .number {
+            width: 58px;
+            height: 58px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 16px;
+            background: #e3f5e8;
+            color: #13834c;
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 24px;
+        }
+
+        .card h3 {
+            color: #173e2c;
+            font-size: 21px;
+            margin-bottom: 13px;
+        }
+
+        .card p {
+            color: #6a7a70;
+            line-height: 1.7;
+        }
+
+        /* IMPACT */
+
+        .impact {
+            background: #123f2c;
+            text-align: center;
+            color: white;
+        }
+
+        .impact .section-heading h2 {
+            color: white;
+        }
+
+        .impact .section-heading p {
+            color: #d0e5d6;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .stat-box {
+            padding: 30px 15px;
+            background: rgba(255,255,255,0.09);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 16px;
+        }
+
+        .stat-box h3 {
+            font-size: 36px;
+            color: #a9e9bb;
+            margin-bottom: 10px;
+        }
+
+        .stat-box p {
+            color: #e0eee3;
+            font-size: 14px;
+        }
+
+        /* CTA */
+
+        .cta {
+            text-align: center;
+            background: #eaf6ed;
+        }
+
+        .cta h2 {
+            font-size: 34px;
+            color: #17432f;
+            margin-bottom: 15px;
+        }
+
+        .cta p {
+            color: #607367;
+            margin-bottom: 27px;
+            line-height: 1.7;
+        }
+
+        /* FOOTER */
+
+        footer {
+            background: #0d2d20;
+            color: white;
+            text-align: center;
+            padding: 50px 20px 25px;
+        }
+
+        footer h2 {
+            font-size: 27px;
+            margin-bottom: 10px;
+        }
+
+        footer p {
+            color: #c5d8cb;
+            margin: 12px 0;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 25px;
+            margin: 25px 0;
+        }
+
+        .footer-links a {
+            color: #d5e7db;
+            font-size: 14px;
+        }
+
+        .copyright {
+            border-top: 1px solid #315443;
+            padding-top: 22px;
+            margin-top: 30px;
+            font-size: 13px;
+        }
+
+        /* ANIMATIONS */
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(25px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* MOBILE RESPONSIVE */
+
+        @media (max-width: 850px) {
+            .navbar {
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+
+            .nav-links {
+                order: 3;
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 17px;
+            }
+
+            .hero {
+                flex-direction: column;
+                text-align: center;
+                padding: 65px 7%;
+            }
+
+            .hero p {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .hero-visual {
+                max-width: 100%;
+                transform: scale(0.85);
+                margin-top: -10px;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo {
+                font-size: 21px;
+            }
+
+            .login-btn, .register-btn {
+                padding: 9px 13px;
+                font-size: 13px;
+            }
+
+            .hero-visual {
+                transform: scale(0.7);
+                margin: -35px 0;
+            }
+
+            .stats {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            section:not(.hero) {
+                padding: 60px 6%;
+            }
+
+            .about-content {
+                padding: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+
+<nav class="navbar">
+    <div class="logo">FoodRescue<span>AI</span></div>
+
+    <div class="nav-links">
+        <a href="#home">Home</a>
+        <a href="#about">About Us</a>
+        <a href="#how">How It Works</a>
+        <a href="#impact">Our Impact</a>
+    </div>
+
+    <div class="nav-buttons">
+        <a href="/login" class="login-btn">Login</a>
+        <a href="/register" class="register-btn">Register</a>
+    </div>
+</nav>
+
+
+<!-- HERO SECTION -->
+
+<section class="hero" id="home">
+
+    <div class="hero-content">
+
+        <span class="tagline">
+            FIGHT FOOD WASTE, FEED PEOPLE
+        </span>
+
+        <h1>
+            Save Food.<br>
+            <span>Share Hope.</span>
+        </h1>
+
+        <p>
+            Every meal matters. Connect food donors with NGOs
+            and help surplus food reach communities that need it.
+            Together, we can make a difference.
+        </p>
+
+        <a href="/register" class="main-btn">
+            Get Started &nbsp; →
+        </a>
+
+    </div>
+
+    <div class="hero-visual">
+
+        <div class="food-circle">
+            🥗
+        </div>
+
+        <div class="floating-card card-one">
+            🍱 Reduce Food Waste
+        </div>
+
+        <div class="floating-card card-two">
+            💚 Support Communities
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- TRUST STRIP -->
+
+<div class="trust-strip">
+    <div class="trust-item">🌱 Reduce Food Waste</div>
+    <div class="trust-item">🤝 Connect Donors & NGOs</div>
+    <div class="trust-item">❤️ Help Communities</div>
+</div>
+
+
+<!-- ABOUT -->
+
+<section class="about" id="about">
+
+    <div class="section-heading">
+        <span>OUR MISSION</span>
+        <h2>Food Can Change Lives</h2>
+        <p>
+            A smarter way to connect surplus food with people in need.
+        </p>
+    </div>
+
+    <div class="about-content">
+
+        <p>
+            FoodRescue AI is a smart food redistribution platform
+            designed to reduce food waste and connect food donors
+            with NGOs and communities in need.
+
+            Donors can list surplus food, NGOs can view and accept
+            available donations, and our rule-based matching system
+            recommends suitable NGOs using food requirements
+            and serving capacity.
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- HOW IT WORKS -->
+
+<section class="how" id="how">
+
+    <div class="section-heading">
+        <span>SIMPLE PROCESS</span>
+        <h2>How It Works</h2>
+        <p>
+            Three simple steps to turn surplus food into support.
+        </p>
+    </div>
+
+    <div class="cards">
+
+        <div class="card">
+            <div class="number">01</div>
+            <h3>🍱 Donate Food</h3>
+            <p>
+                Food donors register and upload details
+                about their available surplus food.
+            </p>
+        </div>
+
+        <div class="card">
+            <div class="number">02</div>
+            <h3>🤝 NGO Matching</h3>
+            <p>
+                The system recommends NGOs based on
+                food requirements and serving capacity.
+            </p>
+        </div>
+
+        <div class="card">
+            <div class="number">03</div>
+            <h3>🚚 Food Distribution</h3>
+            <p>
+                NGOs accept donations and coordinate
+                food collection and distribution.
+            </p>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- IMPACT -->
+
+<section class="impact" id="impact">
+
+    <div class="section-heading">
+        <span>OUR PURPOSE</span>
+        <h2>Small Actions, Big Impact</h2>
+        <p>
+            Every successful donation is a step towards
+            reducing food waste and supporting communities.
+        </p>
+    </div>
+
+    <div class="stats">
+
+        <div class="stat-box">
+            <h3>01</h3>
+            <p>Food Donation Platform</p>
+        </div>
+
+        <div class="stat-box">
+            <h3>02</h3>
+            <p>User Roles: Donor & NGO</p>
+        </div>
+
+        <div class="stat-box">
+            <h3>03</h3>
+            <p>Smart Matching Factors</p>
+        </div>
+
+        <div class="stat-box">
+            <h3>24/7</h3>
+            <p>Platform Access</p>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- CALL TO ACTION -->
+
+<section class="cta">
+
+    <h2>Be Part of the Change</h2>
+
+    <p>
+        Have surplus food? Join our platform and help
+        connect it with communities that need it.
+    </p>
+
+    <a href="/register" class="main-btn">
+        Join FoodRescue AI →
+    </a>
+
+</section>
+
+
+<!-- FOOTER -->
+
+<footer>
+
+    <h2>FoodRescue<span style="color:#e8a33d;">AI</span></h2>
+
+    <p>Save Food. Share Hope. Build a Better Tomorrow.</p>
+
+    <div class="footer-links">
+        <a href="#home">Home</a>
+        <a href="#about">About Us</a>
+        <a href="#how">How It Works</a>
+        <a href="/login">Login</a>
+        <a href="/register">Register</a>
+    </div>
+
+    <p class="copyright">
+        © 2026 FoodRescue AI. All Rights Reserved.
+    </p>
+
+</footer>
+
+</body>
+</html>
